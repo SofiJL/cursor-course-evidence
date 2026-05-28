@@ -11,3 +11,14 @@
 - La carpeta specs debe contener la documentación sobre cada iteración del proyecto.
 - Mientras más específico es el prompt, más consistente es el resultado generado.
 - No todo el código generado sigue buenas prácticas automáticamente.
+
+## Day 02
+
+- Los prompts que son más ambiguos producen respuestas igual de ambiguas.
+- Se pueden crear reglas a nivel del proyecto pero también a nivel del usuario.
+- Las reglas reducen la necesidad de repetir instrucciones en cada prompt, pues se pueden reutilizar.
+- Es importante definir explícitamente estándares de calidad esperados.
+- El código que es generado con más reglas suele ser más fácil de leer y consistente.
+- Aunque se incluyan más reglas, sigue siendo necesaria la validación manual del código.
+- Los prompts que no siguen una estructura correcta y que tienen menos contexto, suelen tardar más en ser ejecutados.
+- Es mejor pedirle a Cursor que planifique e identifique las actividades que va a realizar antes de ejecutarlas.

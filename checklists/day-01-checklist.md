@@ -4,6 +4,6 @@
 - [x] README inicial creado
 - [x] Regla inicial de Cursor agregada
 - [x] Práctica mínima realizada
-- [x] 3 prompts documentados
-- [x] Lessons learned actualizado
+- [x] Prompts documentados
+- [x] Aprendizaje documentado
 - [x] Commit realizado

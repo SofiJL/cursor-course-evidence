@@ -1,0 +1,57 @@
+@use '../styles/vars' as *;
+
+.page {
+  position: relative;
+  min-height: 100vh;
+  background: $background;
+  color: $text-primary;
+}
+
+.header {
+  padding: 2rem 1.5rem 1rem;
+  border-bottom: 1px solid $border;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 700;
+  color: $accent;
+}
+
+.main {
+  padding: 2rem 1.5rem;
+}
+
+.emptyState {
+  color: $text-secondary;
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.coursesGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.courseLink {
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: translateY(-4px);
+  }
+}
+
+.gridBg {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.03;
+  background-image:
+    linear-gradient($border 1px, transparent 1px),
+    linear-gradient(90deg, $border 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: -1;
+}

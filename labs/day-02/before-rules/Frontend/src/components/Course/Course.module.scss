@@ -1,0 +1,47 @@
+@use '../../styles/vars' as *;
+
+.courseCard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  background: $surface;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid $border;
+}
+
+.thumbnailContainer {
+  aspect-ratio: 16 / 9;
+  background: $surface-alt;
+}
+
+.thumbnail {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.thumbnailPlaceholder {
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(135deg, $surface-alt, $surface);
+}
+
+.courseInfo {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.courseTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: $text-primary;
+}
+
+.description {
+  font-size: 0.875rem;
+  color: $text-secondary;
+  line-height: 1.4;
+}

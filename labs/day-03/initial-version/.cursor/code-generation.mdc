@@ -1,0 +1,14 @@
+---
+alwaysApply: true
+---
+
+# Code Generation Rules
+
+- Priorizar código limpio y mantenible.
+- Usar nombres descriptivos para variables y funciones.
+- Evitar lógica duplicada.
+- Explicar decisiones importantes.
+- Agregar validaciones básicas cuando aplique.
+- No generar dependencias innecesarias.
+- Mantener funciones pequeñas y con responsabilidad única.
+- Seguir buenas prácticas del lenguaje utilizado.

@@ -22,3 +22,13 @@
 - Aunque se incluyan más reglas, sigue siendo necesaria la validación manual del código.
 - Los prompts que no siguen una estructura correcta y que tienen menos contexto, suelen tardar más en ser ejecutados.
 - Es mejor pedirle a Cursor que planifique e identifique las actividades que va a realizar antes de ejecutarlas.
+
+
+## Day 03
+
+- Un prompt que referencia specs/, contratos y reglas .mdc permite generar un backend completo sin improvisar requisitos.
+- Las reglas por capa reducen inconsistencias (snake_case, formato de errores, dependencias permitidas).
+- La revisión humana detectó casos que los tests no cubrían.
+- Cursor puede ayudar a generar prompts más estructurados.
+- Los prompts generados automáticamente deben revisarse y ajustarse manualmente.
+- Los prompts demasiado genéricos producen resultados inconsistentes.

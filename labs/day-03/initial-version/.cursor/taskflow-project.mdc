@@ -1,0 +1,42 @@
+---
+description: Contexto y convenciones generales del proyecto TaskFlow
+alwaysApply: true
+---
+
+# TaskFlow — Proyecto
+
+Sistema de administración de tareas personales. Práctica de generación controlada de código con revisión humana.
+
+## Stack
+
+- Backend: Java 21, Spring Boot 3, Maven
+- Frontend (fase 2): TypeScript, React, CSS Modules
+- Persistencia: en memoria (Map/ConcurrentHashMap). **No usar JPA, H2 ni BD real.**
+
+## Principios
+
+- Funciones pequeñas y legibles; responsabilidad única por capa
+- Validaciones básicas; evitar dependencias innecesarias
+- Código fácil de revisar manualmente; cambios mínimos y focalizados
+- No crear commits ni archivos de documentación extra salvo que se pida
+
+## Reglas de negocio
+
+- Título obligatorio; status inicial `PENDING`
+- Estados válidos: `PENDING`, `IN_PROGRESS`, `COMPLETED`
+- Fechas (`created_at`, `updated_at`) generadas automáticamente en backend
+- No permitir actualizar/eliminar tareas inexistentes (404)
+
+## Endpoints REST
+
+| Método | Ruta | Notas |
+|--------|------|-------|
+| POST | /tasks | 201 Created |
+| GET | /tasks | Listado resumido (id, title, status) |
+| GET | /tasks/{id} | Detalle completo |
+| PUT | /tasks/{id}/status | Solo actualiza status |
+| DELETE | /tasks/{id} | `{ "message": "Task deleted successfully" }` |
+
+## JSON
+
+Usar snake_case en respuestas API: `created_at`, `updated_at`.

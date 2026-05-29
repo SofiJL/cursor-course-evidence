@@ -1,0 +1,16 @@
+com\example\taskflow\exception\InvalidStatusException.class
+com\example\taskflow\dto\CreateTaskRequest.class
+com\example\taskflow\controller\TaskController.class
+com\example\taskflow\dto\UpdateStatusRequest.class
+com\example\taskflow\service\TaskService.class
+com\example\taskflow\exception\GlobalExceptionHandler.class
+com\example\taskflow\model\Task.class
+com\example\taskflow\dto\DeleteTaskResponse.class
+com\example\taskflow\dto\ErrorResponse.class
+com\example\taskflow\TaskflowApplication.class
+com\example\taskflow\exception\TaskNotFoundException.class
+com\example\taskflow\dto\TaskSummaryResponse.class
+com\example\taskflow\repository\TaskRepository.class
+com\example\taskflow\model\TaskStatus.class
+com\example\taskflow\mapper\TaskMapper.class
+com\example\taskflow\dto\TaskResponse.class

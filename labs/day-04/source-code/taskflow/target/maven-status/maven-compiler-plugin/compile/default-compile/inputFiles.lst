@@ -1,0 +1,16 @@
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\controller\TaskController.java
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\dto\CreateTaskRequest.java
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\dto\DeleteTaskResponse.java
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\dto\ErrorResponse.java
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\dto\TaskResponse.java
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\dto\TaskSummaryResponse.java
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\dto\UpdateStatusRequest.java
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\exception\GlobalExceptionHandler.java
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\exception\InvalidStatusException.java
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\exception\TaskNotFoundException.java
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\mapper\TaskMapper.java
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\model\Task.java
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\model\TaskStatus.java
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\repository\TaskRepository.java
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\service\TaskService.java
+C:\Users\Ana Sofia\Documents\GitHub\cursor-course-evidence\labs\day-04\source-code\taskflow\src\main\java\com\example\taskflow\TaskflowApplication.java

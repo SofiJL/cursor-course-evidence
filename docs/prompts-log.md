@@ -3,10 +3,12 @@
 ## Day 01
 
 ### Prompt 01
+
 `@labs/day-01/Backend/README.md`
 Entiende cuáles son los pasos secuenciales que están descritos en `@labs/day-01/Backend/specs/01_setup.md`, y plafinica cuáles son las acciones que debes hacer para lograr el paso número 1.
 
 Reglas:
+
 1. No seguirás con los siguientes pasos hasta que yo te lo indique
 2. Planificarás las acciones que debes hacer para yo revisar cómo se va a ejecutar, cuando te diga la palabra ejecutar es que las utilizarás.
 
@@ -25,6 +27,7 @@ Reglas:
 - **Estado de ejecución:** planificado; no ejecutado en el repositorio.
 
 ### Prompt 02
+
 @labs/day-01/Backend/specs/01_setup.md
 Analiza y planifica el paso 2 antes de su ejecución
 
@@ -449,8 +452,6 @@ Restricciones:
 
 #### Resultados obtenidos
 
-
-
 ## **Problema que resuelve**
 
 La API de TaskFlow unifica todos los errores en el formato `{ "message": "..." }` mediante `ErrorResponse` y `GlobalExceptionHandler`. Sin la mejora, una petición como `GET /tasks/abc` fallaba **antes** de llegar al servicio: Spring intentaba convertir `"abc"` a `Long` en `@PathVariable Long id` del `TaskController`, lanzaba una excepción y respondía con el **JSON genérico de Spring** (`timestamp`, `status`, `error`, `path`), no con `ErrorResponse`.
@@ -473,3 +474,135 @@ Esto importa porque el contrato de errores queda **consistente** en todos los ca
 6. El método devuelve `ResponseEntity` con status **400** y cuerpo `ErrorResponse`.
 
 Lo mismo aplica a `PUT /tasks/abc/status` y `DELETE /tasks/abc`, porque todos usan `@PathVariable Long id`.
+
+## Day 03
+
+### Prompt 01
+
+Ejecuta las pruebas de @labs/day-04/source-code  y genera un reporte de los resultados de las pruebas ejecutadas
+
+#### Resultados obtenidos
+
+Reporte generado
+El detalle completo está en labs/day-04/test-report.md, con la tabla de cada test, tiempos y conclusión.
+
+Los reportes XML/TXT de Surefire quedaron en labs/day-04/source-code/taskflow/target/surefire-reports/.
+
+### Prompt 02
+
+Reproduce el error al actualizar status en TaskFlow y dime qué endpoint devuelve 400.
+
+#### Resultados obtenidos
+
+Endpoint que devuelve 400
+PUT /tasks/{id}/status
+
+Es el único endpoint implicado en actualizar el status. Con minúsculas falla; con mayúsculas (COMPLETED, PENDING, IN_PROGRESS) responde 200.
+
+Es un bug de UX: el cliente envía un valor válido semánticamente, pero el servidor lo rechaza por el formato de mayúsculas. ¿Quieres que lo corrija normalizando a mayúsculas en parseStatus()?
+
+### Prompt 03
+
+Genera el plan de tareas para solucionar el error
+No ejecutes nada hasta que te lo indique expresamente
+
+#### Resultados obtenidos
+
+
+
+# **Plan de tareas — Bug status en minúsculas**
+
+**Bug:** `PUT /tasks/{id}/status` devuelve **400** cuando el cliente envía un status válido en minúsculas (p. ej. `"completed"`).
+
+**Causa raíz:** `TaskService.parseStatus()` usa `TaskStatus.valueOf()`, sensible a mayúsculas.
+
+**Comportamiento esperado tras el fix:** aceptar `"completed"`, `"COMPLETED"`, `"Completed"`, etc., y seguir rechazando valores realmente inválidos (p. ej. `"INVALID"`).
+
+---
+
+## **Fase 1 — Documentar el bug (antes de tocar código)**
+
+
+| **#** | **Tarea**                      | **Archivo**                 | **Detalle**                                                             |
+| ----- | ------------------------------ | --------------------------- | ----------------------------------------------------------------------- |
+| 1.1   | Registrar el bug               | `labs/day-04/bug-report.md` | Endpoint, pasos para reproducir, request/response, causa raíz           |
+| 1.2   | Definir criterio de aceptación | `bug-report.md`             | `"completed"` → 200; `"COMPLETED"` sigue funcionando; `"INVALID"` → 400 |
+
+
+**Contenido mínimo del bug report:**
+
+- Endpoint afectado: `PUT /tasks/{id}/status`
+- Request que falla: `{"status":"completed"}`
+- Response actual: `400` + `{"message":"Invalid status: completed"}`
+- Request de control: `{"status":"COMPLETED"}` → `200`
+
+---
+
+## **Fase 2 — Test que reproduce el fallo (TDD)**
+
+
+| **#** | **Tarea**                               | **Archivo**               | **Detalle**                                                                                              |
+| ----- | --------------------------------------- | ------------------------- | -------------------------------------------------------------------------------------------------------- |
+| 2.1   | Test unitario — status en minúsculas    | `TaskServiceTest.java`    | `updateTaskStatus_acceptsLowercaseStatus` con `"completed"` → `TaskStatus.COMPLETED`                     |
+| 2.2   | Test unitario — regresión mayúsculas    | `TaskServiceTest.java`    | Verificar que `"COMPLETED"` sigue funcionando                                                            |
+| 2.3   | Test unitario — valor inválido          | `TaskServiceTest.java`    | `"INVALID"` sigue lanzando `InvalidStatusException`                                                      |
+| 2.4   | Test unitario — casos mixtos (opcional) | `TaskServiceTest.java`    | `"In_Progress"`, `"pending"`                                                                             |
+| 2.5   | Test de contrato HTTP                   | `TaskControllerTest.java` | `updateTaskStatus_returns200WhenStatusIsLowercase` con MockMvc real (sin mock del service) o integración |
+| 2.6   | Ejecutar tests                          | —                         | Confirmar que **2.1 y 2.5 fallan** antes del fix                                                         |
+
+
+**Nota:** `TaskControllerTest` mockea `TaskService`; el test de controller puede verificar el flujo completo solo si no se mockea el parseo, o delegar la lógica al test de service. Lo crítico es el test en `TaskServiceTest`.
+
+---
+
+## **Fase 3 — Corrección mínima en producción**
+
+
+| **#** | **Tarea**                          | **Archivo**        | **Detalle**                                                            |
+| ----- | ---------------------------------- | ------------------ | ---------------------------------------------------------------------- |
+| 3.1   | Normalizar case en `parseStatus()` | `TaskService.java` | Aplicar `.trim().toUpperCase()` antes de `TaskStatus.valueOf()`        |
+| 3.2   | Validar null/vacío                 | `TaskService.java` | Mantener rechazo de `null` y cadenas vacías → `InvalidStatusException` |
+| 3.3   | No tocar otros archivos            | —                  | Sin cambios en controller, enum, DTO ni `GlobalExceptionHandler`       |
+
+
+**Cambio propuesto (referencia, no ejecutar aún):**
+
+return TaskStatus.valueOf(status.trim().toUpperCase());
+
+**Alternativa descartada:** modificar el enum — innecesario y más invasivo.
+
+---
+
+## **Fase 4 — Verificación**
+
+
+| **#** | **Tarea**               | **Comando / acción**              | **Criterio**                                      |
+| ----- | ----------------------- | --------------------------------- | ------------------------------------------------- |
+| 4.1   | Suite completa          | `mvn clean test`                  | 19+ tests PASS, `BUILD SUCCESS`                   |
+| 4.2   | Test específico service | `mvn test -Dtest=TaskServiceTest` | Todos PASS, incluido el nuevo                     |
+| 4.3   | Prueba manual HTTP      | Servidor + `curl`/PowerShell      | `PUT /tasks/1/status` con `"completed"` → **200** |
+| 4.4   | Regresión manual        | Misma prueba con `"COMPLETED"`    | Sigue en **200**                                  |
+| 4.5   | Caso negativo           | `"invalid"` o `"INVALID"`         | Sigue en **400**                                  |
+
+
+---
+
+## **Fase 5 — Documentación y cierre**
+
+
+| **#** | **Tarea**                                            | **Archivo**                           | **Detalle**                                                  |
+| ----- | ---------------------------------------------------- | ------------------------------------- | ------------------------------------------------------------ |
+| 5.1   | Cerrar bug report                                    | `bug-report.md`                       | Solución aplicada, tests añadidos, resultado de verificación |
+| 5.2   | Actualizar reporte de pruebas                        | `labs/day-04/test-report.md`          | Nuevos tests y resultado post-fix                            |
+| 5.3   | Sincronizar copia en `labs/day-04/tests/` (opcional) | `tests/service/`, `tests/controller/` | Si se mantienen como referencia separada                     |
+
+
+### Prompt 04
+Ejecuta los 7 pasos para la solución del error
+
+#### Resultados obtenidos
+
+### Prompt 05
+
+#### Resultados obtenidos
+

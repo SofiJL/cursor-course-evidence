@@ -1,0 +1,75 @@
+---
+alwaysApply: false
+---
+
+# Reglas de pruebas — TaskFlow
+
+Cuando el usuario pida probar, testear o validar el servicio TaskFlow:
+
+1. **Ejecutar** las pruebas existentes antes y después de cambios.
+2. **Generar o actualizar** tests solo si faltan casos o el código cambió.
+3. **Reportar** el comando usado y el resultado (éxito o fallos concretos).
+
+## Comando de verificación
+
+Desde la carpeta `taskflow` del lab (p. ej. `labs/day-03/reviewed-version/taskflow`):
+
+```bash
+mvn clean test
+```
+
+Para un test concreto:
+
+```bash
+mvn test -Dtest=TaskServiceTest
+mvn test -Dtest=TaskControllerTest
+```
+
+## Estructura obligatoria
+
+| Archivo | Tipo | Anotaciones clave |
+|---------|------|-------------------|
+| `TaskServiceTest` | Unitario | `@ExtendWith(MockitoExtension.class)`, `@Mock`, `@InjectMocks` |
+| `TaskControllerTest` | Contrato HTTP | `@WebMvcTest(TaskController.class)`, `@Import(GlobalExceptionHandler.class)`, `@MockitoBean TaskService` |
+
+Ubicación: `src/test/java/com/example/taskflow/{service|controller}/`.
+
+## Casos mínimos a cubrir
+
+### TaskServiceTest (lógica de negocio)
+- Crear tarea: status inicial `PENDING`, `createdAt`/`updatedAt` iguales y no nulos.
+- Listar: devuelve resúmenes mapeados.
+- Detalle: tarea existente vs `TaskNotFoundException`.
+- Actualizar status: cambia status y `updatedAt`; status inválido → `InvalidStatusException` sin guardar.
+- Eliminar: éxito con mensaje vs tarea inexistente.
+
+### TaskControllerTest (contratos JSON y HTTP)
+- `POST /tasks` → 201 con campos snake_case (`created_at`, `updated_at`).
+- `POST /tasks` sin título → 400, `{ "message": "Title is required" }`.
+- `GET /tasks` → 200, solo `id`, `title`, `status` (sin `description` ni fechas).
+- `GET /tasks/{id}` → 200 detalle completo; 404 si no existe.
+- `GET /tasks/abc` → 400, `{ "message": "Invalid task id: abc" }`.
+- `PUT /tasks/{id}/status` → 200 actualizado; 400 status inválido.
+- `DELETE /tasks/{id}` → 200 con mensaje; 404 si no existe.
+
+## Convenciones de código de test
+
+- Nombres de método: `accion_resultadoEsperado` (p. ej. `createTask_setsPendingStatusAndDates`).
+- Usar `@BeforeEach` para datos de ejemplo reutilizables (`buildTask`, `buildTaskResponse`).
+- En service: verificar interacciones con `verify()` y `ArgumentCaptor` cuando aplique.
+- En controller: `MockMvc` + `jsonPath` para validar cuerpo y status; JSON de request en text blocks.
+- No levantar contexto completo salvo que sea estrictamente necesario; preferir `@WebMvcTest`.
+- No agregar dependencias extra; usar solo `spring-boot-starter-test`.
+
+## Flujo al corregir bugs o refactorizar
+
+1. Reproducir el fallo con un test (nuevo o existente).
+2. Aplicar el cambio mínimo en producción.
+3. Ejecutar `mvn clean test` y confirmar que todo pasa.
+4. Documentar en `labs/day-04/bug-report.md` o `refactor-notes.md` qué se probó.
+
+## Qué reportar al usuario
+
+- Comando ejecutado y directorio de trabajo.
+- Número de tests y resultado (`BUILD SUCCESS` / tests fallidos).
+- Si se crearon tests nuevos: qué escenario cubren y por qué.

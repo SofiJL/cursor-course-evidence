@@ -1,0 +1,12 @@
+---
+alwaysApply: true
+---
+
+# Documentation Rules
+
+- Explicar propósito del código generado.
+- Documentar entradas y salidas importantes.
+- Registrar limitaciones conocidas.
+- Mantener ejemplos simples y claros.
+- Generar comentarios únicamente cuando aporten contexto útil.
+- Explicar comandos utilizados para ejecutar o probar código.

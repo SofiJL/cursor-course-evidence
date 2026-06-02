@@ -1,0 +1,49 @@
+---
+description: Arquitectura y convenciones del backend Spring Boot de TaskFlow
+globs: "**/*.java"
+alwaysApply: false
+---
+
+# TaskFlow — Backend Java
+
+## Paquete base
+
+`com.example.taskflow` con capas estrictas:
+
+- `controller` — REST, validación de entrada (`@Valid`), sin lógica de negocio
+- `service` — reglas de negocio y orquestación
+- `repository` — acceso en memoria (`ConcurrentHashMap<Long, Task>`)
+- `model` — entidades internas (`Task`, `TaskStatus`)
+- `dto` — contratos JSON request/response
+- `mapper` — conversión model ↔ dto
+- `exception` — excepciones custom + `GlobalExceptionHandler`
+
+## Flujo permitido
+
+Controller → Service → Repository. **No** acceder al repository desde el controller.
+
+## Convenciones
+
+- Modelo interno: camelCase (`createdAt`). DTOs JSON: `@JsonProperty("created_at")`
+- IDs secuenciales con `AtomicLong` en el repository
+- `LocalDateTime.now()` para fechas; actualizar `updatedAt` en cada cambio de status
+- POST /tasks → `@ResponseStatus(CREATED)`; resto → 200
+- Errores JSON unificados: `{ "message": "..." }`
+
+## DTOs requeridos
+
+- `CreateTaskRequest` — title `@NotBlank`, description opcional
+- `UpdateStatusRequest` — status `@NotNull`, validar enum
+- `TaskResponse` — detalle completo
+- `TaskSummaryResponse` — solo id, title, status (GET /tasks)
+- `DeleteTaskResponse` — mensaje de confirmación
+
+## Dependencias permitidas
+
+`spring-boot-starter-web`, `spring-boot-starter-validation`, `spring-boot-starter-test`.
+No agregar JPA, Lombok ni librerías extra sin justificación.
+
+## Tests
+
+- `TaskServiceTest` — unitarios con mocks del repository
+- `TaskControllerTest` — contratos JSON y códigos HTTP

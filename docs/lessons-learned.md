@@ -32,3 +32,10 @@
 - Cursor puede ayudar a generar prompts más estructurados.
 - Los prompts generados automáticamente deben revisarse y ajustarse manualmente.
 - Los prompts demasiado genéricos producen resultados inconsistentes.
+
+
+## Day 05
+
+- Un MCP podria ser útil para el trabajo del día a día, pero es importante conocer los riesgos y tener cuidado con el alcance de la información que le vamos a proporcionar a la IA.
+- Es importante generar tus reglas antes de empezar a trabajar en un proyecto.
+- 
